@@ -14,8 +14,11 @@ import {
 } from '../schemas/contactsSchemas.js';
 import validateBody from '../helpers/validateBody.js';
 import controllerWrapper from '../decorators/controllerWrapper.js';
+import authenticate from '../middleware/authenticate.js';
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', controllerWrapper(getAllContacts));
 
