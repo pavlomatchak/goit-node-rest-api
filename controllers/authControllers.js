@@ -4,12 +4,12 @@ import * as authServices from '../services/authServices.js';
 import HttpError from '../helpers/HttpError.js';
 import { createToken } from '../helpers/jwt.js';
 
-function findUser(payload) {
-  return authServices.findUser(payload);
+function findUser(query) {
+  return authServices.findUser(query);
 }
 
 export async function registerUser(req, res) {
-  const user = await findUser(req.body.email);
+  const user = await findUser({ email: req.body.email });
   if (user) {
     throw HttpError(409, 'Email in use');
   }
@@ -30,9 +30,7 @@ export async function registerUser(req, res) {
 }
 
 export async function loginUser(req, res) {
-  const user = await findUser({
-    email: req.body.email,
-  });
+  const user = await findUser({ email: req.body.email });
 
   if (!user) {
     throw HttpError(401, 'Email or password is wrong');
