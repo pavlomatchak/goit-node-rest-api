@@ -3,7 +3,7 @@ import express from 'express';
 import * as authControllers from '../controllers/authControllers.js';
 import validateBody from '../helpers/validateBody.js';
 import controllerWrapper from '../decorators/controllerWrapper.js';
-import { loginSchema, registerSchema } from '../schemas/authShema.js';
+import { loginSchema, registerSchema, varifySchema } from '../schemas/authShema.js';
 import authenticate from '../middleware/authenticate.js';
 import upload from '../middleware/upload.js';
 
@@ -18,5 +18,9 @@ authRouter.get('/current', authenticate, controllerWrapper(authControllers.getCu
 authRouter.post('/logout', authenticate, controllerWrapper(authControllers.logoutUser));
 
 authRouter.patch('/avatars', authenticate, upload.single('avatar'), controllerWrapper(authControllers.uploadAvatar));
+
+authRouter.get('/verify/:verificationToken', controllerWrapper(authControllers.verify));
+
+authRouter.post('/verify', validateBody(varifySchema), controllerWrapper(authControllers.resendVerify));
 
 export default authRouter;
